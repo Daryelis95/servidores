@@ -32,6 +32,7 @@
         "@material-ui/icons": "^4.11.2",
         "@material-ui/lab": "^4.0.0-alpha.57",
         "@webpack-cli/init": "^1.1.1",
+        "primereact": "^5.0.2",
         "react": "^17.0.1",
         "react-beautiful-dnd": "^13.0.0",
         "react-confirm-alert": "^2.6.2",

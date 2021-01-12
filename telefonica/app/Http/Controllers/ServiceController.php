@@ -43,10 +43,13 @@ class ServiceController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
+       
+        $path = $request->file('image')->store('public');
+        
         $Service = Service::create($request->all());
  
-        return response()->json($Service, 201);
+        return response()->json(['service'=> $Service, 'path'=> $path ] , 201);
     }
 
 

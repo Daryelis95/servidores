@@ -99,7 +99,7 @@ const ListService = () => {
   
     //Funcion para insertar nuevo servicio
     const insertService = (service) => {
-        
+       console.log(service); 
         axios.post(`/api/service`, service )
         .then(res => {
             obtenerData()

@@ -33,7 +33,8 @@ const ModalForm = ({onSave ,modoEdicion = false , servicio = null , listServicio
         },
     }));
     const classes = useStyles();
-
+  
+  
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -129,17 +130,8 @@ const ModalForm = ({onSave ,modoEdicion = false , servicio = null , listServicio
                                 </div>
                             )
                         }
-                         
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="name"
-                            label="File"
-                            type="texto"
-                            
-                            value={image}
-                            onChange={e => setImage(e.target.value)}
-                        />
+                        <input onChange={e => setImage(e.target.value)} type="file" id="image" />
+
                         <TextField
                             autoFocus
                             margin="dense"
