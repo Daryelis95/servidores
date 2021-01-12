@@ -12,21 +12,52 @@ import TablePagination from '@material-ui/core/TablePagination';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
-import CreateIcon from '@material-ui/icons/Create';
+import ModalForm from './ModalForm';
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+import axios from 'axios';
 
 const ListService = () => {
 
+    const [page, setPage] = React.useState(0); //pagina
+    const [rowsPerPage, setRowsPerPage] = React.useState(5); //filas por paginas
+    const [servicios, setServicios] = React.useState([]); //filas por paginas
+
+    const obtenerData = () => {
+
+        axios.get(`/api/service`)
+        .then(res => {
+            const services = res.data;
+            setServicios(services);
+        })
+    }
+
+    React.useEffect(() => {
+    
+        obtenerData()
+    
+    },[])
+
+    
     //minimo de ancho tabla
     const useStyles = makeStyles({
         table: {
           minWidth: 700,
         },
+        image: {
+            width: 128,
+            height: 128,
+        },
+          img: {
+            margin: 'auto',
+            display: 'block',
+            maxWidth: '100%',
+            maxHeight: '100%',
+        },
     });
 
     const classes = useStyles();
 
-    const [page, setPage] = React.useState(0); //pagina
-    const [rowsPerPage, setRowsPerPage] = React.useState(5); //filas por paginas
     
     //estilo de celdas
     const StyledTableCell = withStyles((theme) => ({
@@ -48,103 +79,9 @@ const ListService = () => {
         },
     }))(TableRow);
 
-    //funcion para crear filas
-    function createData(image, descripcion, host, ip, editar, eliminar) {
-        return { image, descripcion, host, ip, editar, eliminar };
-    }
-
-    const rows = [
-        createData('jpg', 'Frozen yoghurt', 'https://es.reactjs.org/', 190.05, 
-            <IconButton aria-label="delete" className={classes.margin}>
-                <CreateIcon fontSize="small" />
-            </IconButton>, 
-            <IconButton aria-label="delete" className={classes.margin}>
-                <DeleteIcon fontSize="small" />
-            </IconButton>
-        ),
-        createData('jpg','Ice cream sandwich', 'https://es.reactjs.org/', 190.04,
-            <IconButton aria-label="delete" className={classes.margin}>
-                <CreateIcon fontSize="small" />
-            </IconButton>, 
-            <IconButton aria-label="delete" className={classes.margin}>
-                <DeleteIcon fontSize="small" />
-            </IconButton>
-        ),
-        createData('jpg','Eclair','https://es.reactjs.org/', 190.03, 
-            <IconButton aria-label="delete" className={classes.margin}>
-                <CreateIcon fontSize="small" />
-            </IconButton>, 
-            <IconButton aria-label="delete" className={classes.margin}>
-                <DeleteIcon fontSize="small" />
-            </IconButton>
-        ),
-        createData('jpg','Cupcake','https://es.reactjs.org/', 190.01,
-            <IconButton aria-label="delete" className={classes.margin}>
-                <CreateIcon fontSize="small" />
-            </IconButton>,
-            <IconButton aria-label="delete" className={classes.margin}>
-                <DeleteIcon fontSize="small" />
-            </IconButton>
-        ),
-        createData('jpg','yoghurt','https://es.reactjs.org/', 190.06,
-            <IconButton aria-label="delete" className={classes.margin}>
-                <CreateIcon fontSize="small" />
-            </IconButton>,
-            <IconButton aria-label="delete" className={classes.margin}>
-                <DeleteIcon fontSize="small" />
-            </IconButton>
-        ),
-        createData('jpg','sandwich','https://es.reactjs.org/', 190.07, 
-            <IconButton aria-label="delete" className={classes.margin}>
-                <CreateIcon fontSize="small" />
-            </IconButton>,
-            <IconButton aria-label="delete" className={classes.margin}>
-                <DeleteIcon fontSize="small" />
-            </IconButton>
-        ),
-        createData('jpg','cream','https://es.reactjs.org/', 190.08, 
-            <IconButton aria-label="delete" className={classes.margin}>
-                <CreateIcon fontSize="small" />
-            </IconButton>,
-            <IconButton aria-label="delete" className={classes.margin}>
-                <DeleteIcon fontSize="small" />
-            </IconButton>
-        ),
-        createData('jpg','Frozen','https://es.reactjs.org/', 190.09, 
-            <IconButton aria-label="delete" className={classes.margin}>
-                <CreateIcon fontSize="small" />
-            </IconButton>,
-            <IconButton aria-label="delete" className={classes.margin}>
-                <DeleteIcon fontSize="small" />
-            </IconButton>
-        ),
-        createData('jpg','Cupcake','https://es.reactjs.org/', 190.10, 
-            <IconButton aria-label="delete" className={classes.margin}>
-                <CreateIcon fontSize="small" />
-            </IconButton>,
-            <IconButton aria-label="delete" className={classes.margin}>
-                <DeleteIcon fontSize="small" />
-            </IconButton>
-        ),
-        createData('jpg','Eclair','https://es.reactjs.org/', 190.11,
-            <IconButton aria-label="delete" className={classes.margin}>
-                <CreateIcon fontSize="small" />
-            </IconButton>,
-            <IconButton aria-label="delete" className={classes.margin}>
-                <DeleteIcon fontSize="small" />
-            </IconButton>
-        ),
-        createData('jpg','Gingerbread','https://es.reactjs.org/', 190.12,
-            <IconButton aria-label="delete" className={classes.margin}>
-                <CreateIcon fontSize="small" />
-            </IconButton>,
-            <IconButton aria-label="delete" className={classes.margin}>
-                <DeleteIcon fontSize="small" />
-            </IconButton>
-        ),
-    ];
+    
       
-    function stableSort(array) {
+    const stableSort = (array)=> {
         const stabilizedThis = array.map((el, index) => [el, index]);
         return stabilizedThis.map((el) => el[0]);
     }
@@ -158,40 +95,119 @@ const ListService = () => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
-    
-  
 
+  
+    //Funcion para insertar nuevo servicio
+    const insertService = (service) => {
+        
+        axios.post(`/api/service`, service )
+        .then(res => {
+            obtenerData()
+        })
+        
+    }
+
+    //Funcion para editar nuevo servicio
+    const editService = (service) => {
+       
+        axios.put(`/api/service/${service.id}`, service )
+        .then(res => {
+         
+            console.log(res.data);
+            obtenerData()
+        })
+       
+    }
+
+    //Funcion para eliminar servicio
+    const eliminar = (id) =>{
+
+        const arrayFiltrado = servicios.filter(item => item.id !== id)
+        setServicios(arrayFiltrado)
+    }
+    //confirmacion para eliminar servicio
+    const ConfmEliminar =  (id) => {
+       
+        
+        confirmAlert({
+            customUI: ({ onClose }) => {
+              return (
+                <div className='alert alert-secondary border border-danger' role="alert">
+                  <h1>Alerta</h1>
+                  <p>¿Desea eliminar este registro?</p>
+                    <button className='btn btn-secondary mr-2' onClick={onClose}>No</button>
+                    <button className='btn btn-secondary'
+                        onClick={() => {
+                    
+                            eliminar(id)
+                        onClose();
+                        }}
+                    >
+                        Si
+                    </button>
+                </div>
+              );
+            }
+        });
+       
+    }
+
+    const handleOnDragEnd = (result) => {
+        if (!result.destination) return; //verifica si el destino existe sino sale de la funcion
+        const items = servicios;
+        const [reorderedItem] = items.splice(result.source.index, 1); //elemento arrastrado
+        items.splice(result.destination.index, 0, reorderedItem); // Luego usamos nuestro destination.inddex
+        setServicios(items);                                         //para agregar ese elemento nuevamente a la matriz, pero en su nueva ubicación, 
+    }                                            //nuevamente usandosplice
+    
     return (
         <div>
+            <ModalForm onSave={insertService}/>
+            
             <TableContainer component={Paper}>
                 <Table className={classes.table} aria-label="customized table">
                     <TableHead>
-                    <TableRow>
-                        <StyledTableCell>Imagen</StyledTableCell>
-                        <StyledTableCell align="right">Descripcion</StyledTableCell>
-                        <StyledTableCell align="right">HOST</StyledTableCell>
-                        <StyledTableCell align="right">IP</StyledTableCell>
-                        <StyledTableCell align="right"></StyledTableCell>
-                        <StyledTableCell align="right"></StyledTableCell>
-                    </TableRow>
-                    </TableHead>
-                    <TableBody>
+                        <TableRow>
+                            <StyledTableCell>Imagen</StyledTableCell>
+                            <StyledTableCell align="right">Descripcion</StyledTableCell>
+                            <StyledTableCell align="right">HOST</StyledTableCell>
+                            <StyledTableCell align="right">IP</StyledTableCell>
+                            <StyledTableCell align="right"></StyledTableCell>
+                            <StyledTableCell align="right"></StyledTableCell>
+                        </TableRow>
                         
-                    {stableSort(rows)
-                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                        .map((row , index) => (
-                        <StyledTableRow key={row.ip}>
-                        <StyledTableCell component="th" scope="row" >
-                            {row.image}
-                        </StyledTableCell>
-                        <StyledTableCell align="right">{row.descripcion}</StyledTableCell>
-                        <StyledTableCell align="right">{row.host}</StyledTableCell>
-                        <StyledTableCell align="right">{row.ip}</StyledTableCell>
-                        <StyledTableCell align="right">{row.editar}</StyledTableCell>
-                        <StyledTableCell align="right">{row.eliminar}</StyledTableCell>
-                        </StyledTableRow>
-                    ))}
-                    </TableBody>
+                    </TableHead>
+                   
+                            <TableBody>
+                            
+                                {stableSort(servicios)
+                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                    .map((row , index) => (
+                                  
+                                       
+                                            <StyledTableRow key={row.id}  index={index}>
+                                                <StyledTableCell component="th" scope="row" className={classes.image} >
+                                                    <img className={classes.img} alt="complex" src={row.image}/>
+                                                </StyledTableCell>
+                                                <StyledTableCell align="right">{row.descripcion}</StyledTableCell>
+                                                <StyledTableCell align="right">{row.host}</StyledTableCell>
+                                                <StyledTableCell align="right">{row.ip}</StyledTableCell>
+                                                <StyledTableCell align="right">
+                                                    <ModalForm onSave={editService} modoEdicion = {true} servicio={row} listServicio = {servicios}/>
+                                                </StyledTableCell>
+                                                <StyledTableCell align="right">
+                                                    <IconButton aria-label="delete" className={classes.margin} onClick={() => ConfmEliminar(row.id)}>
+                                                        <DeleteIcon fontSize="small" />
+                                                    </IconButton >
+                                                </StyledTableCell>
+                                            </StyledTableRow>
+                                           
+
+                                 
+                                ))}
+                               
+                                </TableBody>
+                   
                     <TableFooter>
                     <TableRow>
                   
@@ -202,7 +218,7 @@ const ListService = () => {
             <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
-                count={rows.length}
+                count={servicios.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onChangePage={handleChangePage}
