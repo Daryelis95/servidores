@@ -174,7 +174,21 @@ $ npm i
 $ composer install
 ```
 # Levantar proyecto
- Abre dos consola entra en el directorio donde creastes el proyecto y ejecuta: 
+
+### En la raiz del proyecto crea un archivo .env 
+ Copia lo que esta en .env.example y pega en tu nuevo archivo modificando los campos:
+ 
+```sh
+ DB_CONNECTION=mysql
+ DB_HOST=127.0.0.1
+ DB_PORT=3306
+ DB_DATABASE=nombreDb
+ DB_USERNAME=root
+ DB_PASSWORD=example
+```
+
+
+### Abre dos consola entra en el directorio donde creastes el proyecto y ejecuta: 
 ```sh
 $ npm run start
 ```
