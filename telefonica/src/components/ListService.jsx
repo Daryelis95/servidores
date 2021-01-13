@@ -122,8 +122,13 @@ const ListService = () => {
     //Funcion para eliminar servicio
     const eliminar = (id) =>{
 
-        const arrayFiltrado = servicios.filter(item => item.id !== id)
-        setServicios(arrayFiltrado)
+        axios.delete(`/api/service/${id}`)
+        .then(res => {
+         
+            const arrayFiltrado = servicios.filter(item => item.id !== id)
+            setServicios(arrayFiltrado) 
+        })
+        
     }
     //confirmacion para eliminar servicio
     const ConfmEliminar =  (id) => {

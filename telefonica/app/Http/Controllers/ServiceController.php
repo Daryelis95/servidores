@@ -55,7 +55,7 @@ class ServiceController extends Controller
         
         $Service = Service::create($data);
        
-        return response()->json($Service , 201);
+        return response()->json($Service , 201); 
     }
 
 
@@ -82,7 +82,8 @@ class ServiceController extends Controller
      */
     public function destroy($id)
     {
-        $Service->delete();
+        $service = Service::find($id);
+        $service->delete();
 
         return response()->json(null, 204);
 
