@@ -187,7 +187,7 @@ const ListService = () => {
                                        
                                             <StyledTableRow key={row.id}  index={index}>
                                                 <StyledTableCell component="th" scope="row" className={classes.image} >
-                                                    <img className={classes.img} alt="complex" src={row.image}/>
+                                                    <img className={classes.img} alt="image" src={`storage/${row.image}`}/>
                                                 </StyledTableCell>
                                                 <StyledTableCell align="right">{row.descripcion}</StyledTableCell>
                                                 <StyledTableCell align="right">{row.host}</StyledTableCell>

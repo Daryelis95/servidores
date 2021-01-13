@@ -44,12 +44,18 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {   
-       
-        $path = $request->file('image')->store('public');
+        $data = $request->all(); // obtener datos
         
-        $Service = Service::create($request->all());
- 
-        return response()->json(['service'=> $Service, 'path'=> $path ] , 201);
+        if($file = $request->file('image')){
+      
+            $name = $request->file('image')->getClientOriginalName(); //obtener nombre de archivo
+            $file->move('storage', $name); //mover archivo a la carpeta store
+            $data['image'] = $name; 
+        }
+        
+        $Service = Service::create($data);
+       
+        return response()->json($Service , 201);
     }
 
 
