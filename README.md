@@ -173,6 +173,10 @@ $ npm i
 ```sh
 $ composer install
 ```
+```sh
+$ php artisan key:generate
+```
+
 # Levantar proyecto
 
 ### En la raiz del proyecto crea un archivo .env 

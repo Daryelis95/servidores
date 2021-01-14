@@ -60,8 +60,8 @@ const ModalForm = ({onSave ,modoEdicion = false , servicio = null , listServicio
 
 
         if(modoEdicion){
-          
-            servicio.image = servicio.image
+         
+            servicio.image = image
             servicio.descripcion = descripcion
             servicio.host = host
             servicio.ip = ip
@@ -71,7 +71,7 @@ const ModalForm = ({onSave ,modoEdicion = false , servicio = null , listServicio
           
             
             onSave({
-                image: image.name,
+                image: image,
                 descripcion,
                 host,
                 ip
@@ -135,6 +135,7 @@ const ModalForm = ({onSave ,modoEdicion = false , servicio = null , listServicio
                         <input  type="file" 
                                 onChange={handleFile}
                                 name="image"
+                                accept="image/*"
                                 id="image" />
 
                         <TextField

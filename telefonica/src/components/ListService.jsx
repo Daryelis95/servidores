@@ -99,9 +99,17 @@ const ListService = () => {
   
     //Funcion para insertar nuevo servicio
     const insertService = (service) => {
-       console.log(service); 
-        axios.post(`/api/service`, service )
+       
+       const formData = new FormData();
+
+       formData.append('image' , service.image, service.image.name )
+       formData.append('descripcion' , service.descripcion )
+       formData.append('host' , service.host )
+       formData.append('ip' , service.ip)
+
+        axios.post(`/api/service`, formData )
         .then(res => {
+           
             obtenerData()
         })
         

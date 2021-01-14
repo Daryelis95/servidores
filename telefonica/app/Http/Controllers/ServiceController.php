@@ -45,14 +45,15 @@ class ServiceController extends Controller
     public function store(Request $request)
     {   
         $data = $request->all(); // obtener datos
-        
+       
         if($file = $request->file('image')){
-      
+          
             $name = $request->file('image')->getClientOriginalName(); //obtener nombre de archivo
             $file->move('storage', $name); //mover archivo a la carpeta store
             $data['image'] = $name; 
         }
         
+
         $Service = Service::create($data);
        
         return response()->json($Service , 201); 
@@ -67,8 +68,10 @@ class ServiceController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
+    {   
+       
         $Service = Service::find($id);
+
         $Service->update($request->all());
  
         return response()->json($Service, 200);
