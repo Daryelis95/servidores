@@ -1,21 +1,16 @@
 import React from 'react'
 import {hot} from 'react-hot-loader';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
-import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ModalForm from './ModalForm';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import axios from 'axios';
+import { DragDropContext, Droppable , Draggable } from 'react-beautiful-dnd';
 
 const ListService = () => {
 
@@ -45,14 +40,14 @@ const ListService = () => {
           minWidth: 700,
         },
         image: {
-            width: 128,
-            height: 128,
+            width: 100,
+            height: 100,
         },
           img: {
             margin: 'auto',
             display: 'block',
-            maxWidth: '100%',
-            maxHeight: '100%',
+            maxWidth: '80%',
+            maxHeight: '80%',
         },
     });
 
@@ -79,13 +74,6 @@ const ListService = () => {
         },
     }))(TableRow);
 
-    
-      
-    const stableSort = (array)=> {
-        const stabilizedThis = array.map((el, index) => [el, index]);
-        return stabilizedThis.map((el) => el[0]);
-    }
-
     //Funcion para cambiar de pagina
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -106,7 +94,7 @@ const ListService = () => {
        formData.append('descripcion' , service.descripcion )
        formData.append('host' , service.host )
        formData.append('ip' , service.ip)
-
+      
         axios.post(`/api/service`, formData )
         .then(res => {
            
@@ -166,6 +154,7 @@ const ListService = () => {
     }
 
     const handleOnDragEnd = (result) => {
+      
         if (!result.destination) return; //verifica si el destino existe sino sale de la funcion
         const items = servicios;
         const [reorderedItem] = items.splice(result.source.index, 1); //elemento arrastrado
@@ -176,58 +165,59 @@ const ListService = () => {
     return (
         <div>
             <ModalForm onSave={insertService}/>
-            
-            <TableContainer component={Paper}>
-                <Table className={classes.table} aria-label="customized table">
-                    <TableHead>
-                        <TableRow>
-                            <StyledTableCell>Imagen</StyledTableCell>
-                            <StyledTableCell align="right">Descripcion</StyledTableCell>
-                            <StyledTableCell align="right">HOST</StyledTableCell>
-                            <StyledTableCell align="right">IP</StyledTableCell>
-                            <StyledTableCell align="right"></StyledTableCell>
-                            <StyledTableCell align="right"></StyledTableCell>
-                        </TableRow>
-                        
-                    </TableHead>
-                   
-                            <TableBody>
-                            
-                                {stableSort(servicios)
-                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    .map((row , index) => (
-                                  
-                                       
-                                            <StyledTableRow key={row.id}  index={index}>
-                                                <StyledTableCell component="th" scope="row" className={classes.image} >
-                                                    <img className={classes.img} alt="image" src={`storage/${row.image}`}/>
-                                                </StyledTableCell>
-                                                <StyledTableCell align="right">{row.descripcion}</StyledTableCell>
-                                                <StyledTableCell align="right">{row.host}</StyledTableCell>
-                                                <StyledTableCell align="right">{row.ip}</StyledTableCell>
-                                                <StyledTableCell align="right">
-                                                    <ModalForm onSave={editService} modoEdicion = {true} servicio={row} listServicio = {servicios}/>
-                                                </StyledTableCell>
-                                                <StyledTableCell align="right">
-                                                    <IconButton aria-label="delete" className={classes.margin} onClick={() => ConfmEliminar(row.id)}>
-                                                        <DeleteIcon fontSize="small" />
-                                                    </IconButton >
-                                                </StyledTableCell>
-                                            </StyledTableRow>
-                                           
-
-                                 
-                                ))}
-                               
-                                </TableBody>
-                   
-                    <TableFooter>
-                    <TableRow>
-                  
-                    </TableRow>
-                    </TableFooter>
-                </Table>
-            </TableContainer>
+          
+            <table className="table">
+                <thead className="thead-dark">
+                    <tr>
+                    <th scope="col">Image</th>
+                    <th scope="col">Descripcion</th>
+                    <th scope="col">Host</th>
+                    <th scope="col">IP</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    </tr>
+                </thead>
+             
+                <DragDropContext onDragEnd={handleOnDragEnd} >
+                    <Droppable droppableId="characters">
+                        {(provided) => (
+                        <tbody className="characters" {...provided.droppableProps} ref={provided.innerRef}>
+                            {
+                            servicios.map((item , index) => (
+                                <Draggable key={item.id} draggableId={item.image} index={index}>
+                                {(provided) => (
+                                    <tr  ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                        <td className={classes.image}>
+                                            <img className={classes.img} alt="image" src={`storage/${item.image}`}/>
+                                        </td>
+                                        <td>
+                                            {item.descripcion}
+                                        </td>
+                                        <td>
+                                            {item.host}
+                                        </td>
+                                        <td>
+                                            {item.ip}
+                                        </td>
+                                        <td>
+                                            <ModalForm onSave={editService} modoEdicion = {true} servicio={item} listServicio = {servicios}/>
+                                        </td>
+                                        <td>
+                                            <IconButton aria-label="delete" className={classes.margin} onClick={() => ConfmEliminar(item.id)}>
+                                                <DeleteIcon fontSize="small" />
+                                            </IconButton >
+                                        </td>
+                                    </tr>
+                                )}
+                                </Draggable>
+                            ))
+                            }
+                            {provided.placeholder}
+                        </tbody>
+                        )}
+                    </Droppable>
+                    </DragDropContext>
+            </table>
             <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
@@ -237,6 +227,7 @@ const ListService = () => {
                 onChangePage={handleChangePage}
                 onChangeRowsPerPage={handleChangeRowsPerPage}
             />
+               
         </div>
     )
 }

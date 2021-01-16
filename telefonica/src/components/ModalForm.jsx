@@ -65,7 +65,6 @@ const ModalForm = ({onSave ,modoEdicion = false , servicio = null , listServicio
             servicio.descripcion = descripcion
             servicio.host = host
             servicio.ip = ip
-           
             onSave(servicio)
         }else{
           
