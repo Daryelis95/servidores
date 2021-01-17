@@ -74,6 +74,10 @@ const ListService = () => {
         },
     }))(TableRow);
 
+    const stableSort = (array)=> {
+        const stabilizedThis = array.map((el, index) => [el, index]);
+        return stabilizedThis.map((el) => el[0]);
+    }
     //Funcion para cambiar de pagina
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -182,8 +186,9 @@ const ListService = () => {
                     <Droppable droppableId="characters">
                         {(provided) => (
                         <tbody className="characters" {...provided.droppableProps} ref={provided.innerRef}>
-                            {
-                            servicios.map((item , index) => (
+                            {stableSort(servicios)
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((item , index) => (
                                 <Draggable key={item.id} draggableId={item.image} index={index}>
                                 {(provided) => (
                                     <tr  ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
