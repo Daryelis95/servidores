@@ -69,9 +69,19 @@ class ServiceController extends Controller
      */
     public function update(Request $request, $id)
     {   
-       
+        
+       /*  $file = $request->file('image');
+    
+        $name = $request->file('image')->getClientOriginalName(); //obtener nombre de archivo
+        $file->move('storage', $name); //mover archivo a la carpeta store */
+        
         $Service = Service::find($id);
 
+        /* $Service->descripcion = $request->descripcion;
+        $Service->host = $request->host;
+        $Service->ip = $request->ip;
+        $Service->image = $name; */
+       
         $Service->update($request->all());
  
         return response()->json($Service, 200);

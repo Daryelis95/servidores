@@ -34,6 +34,9 @@
         "@material-ui/lab": "^4.0.0-alpha.57",
         "@webpack-cli/init": "^1.1.1",
         "bootstrap": "^4.5.3",
+        "chrome-dgram": "^3.0.6",
+        "dgram": "^1.0.1",
+        "net-snmp": "^3.1.1",
         "primereact": "^5.0.2",
         "react": "^17.0.1",
         "react-beautiful-dnd": "^13.0.0",
@@ -42,6 +45,7 @@
         "react-dom": "^17.0.1",
         "react-draggable": "^4.4.3",
         "react-hot-loader": "^4.13.0",
+        "react-input-mask": "^2.0.4",
         "react-router-dom": "^5.2.0",
         "sass": "^1.32.0",
         "sass-loader": "^10.1.0"

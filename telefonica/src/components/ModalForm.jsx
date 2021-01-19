@@ -9,6 +9,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
 import CreateIcon from '@material-ui/icons/Create';
 import Alert from '@material-ui/lab/Alert';
+import InputMask from "react-input-mask";
 
 const ModalForm = ({onSave ,modoEdicion = false , servicio = null , listServicio}) => {
   
@@ -156,16 +157,19 @@ const ModalForm = ({onSave ,modoEdicion = false , servicio = null , listServicio
                             value={host}
                             onChange={e => setHost(e.target.value)}
                         />
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="name"
-                            label="IP"
-                            type="text"
-                        
-                            value={ip}
-                            onChange={e => setIp(e.target.value)}
-                        />
+                       
+                        <InputMask
+                           mask="999 99 99 9"
+                           autoFocus
+                           margin="dense"
+                           id="name"
+                           label="IP"
+                           type="text"
+                           value={ip}
+                           onChange={e => setIp(e.target.value)}
+                           maskChar=" ">
+                            {() => <TextField />}
+                        </InputMask>
                     </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
@@ -184,4 +188,3 @@ const ModalForm = ({onSave ,modoEdicion = false , servicio = null , listServicio
 
 
 export default hot(module)(ModalForm);
-
