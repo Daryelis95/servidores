@@ -57,15 +57,27 @@ const ModalForm = ({onSave ,modoEdicion = false , servicio = null , listServicio
     const procesarDatos = (e) => {
     
         e.preventDefault()
-      
+        
+        
+        if (!image) {
+          
+            setError( 'Seleccione una imagen.');
+            return false;
+        }
+
         if(!descripcion.trim()){
             setError('Ingrese Descripcion')
-            return
+            return false;
         }
         
         if(!host.trim()){
             setError('Ingrese Host')
-            return
+            return false;
+        }
+
+        if(ip == ''){
+            setError('Ingrese ip')
+            return false;
         }
 
         // si edicion es verdadera actualiza
