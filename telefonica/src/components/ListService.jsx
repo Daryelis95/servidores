@@ -48,31 +48,11 @@ const ListService = () => {
             display: 'block',
             maxWidth: '80%',
             maxHeight: '80%',
+            rounded:'rounded'
         },
     });
 
     const classes = useStyles();
-
-    
-    //estilo de celdas
-    const StyledTableCell = withStyles((theme) => ({
-        head: {
-          backgroundColor: theme.palette.common.black,
-          color: theme.palette.common.white,
-        },
-        body: {
-          fontSize: 14,
-        },
-    }))(TableCell);
-
-    //estilos de fila
-    const StyledTableRow = withStyles((theme) => ({
-        root: {
-          '&:nth-of-type(odd)': {
-            backgroundColor: theme.palette.action.hover,
-          },
-        },
-    }))(TableRow);
 
     const stableSort = (array)=> {
         const stabilizedThis = array.map((el, index) => [el, index]);
@@ -192,7 +172,7 @@ const ListService = () => {
                                 <Draggable key={item.id} draggableId={item.image} index={index}>
                                 {(provided) => (
                                     <tr  ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                                        <td className={classes.image}>
+                                        <td className={classes.image }>
                                             <img className={classes.img} alt="image" src={`storage/${item.image}`}/>
                                         </td>
                                         <td>

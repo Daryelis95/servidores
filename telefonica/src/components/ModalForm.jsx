@@ -39,12 +39,21 @@ const ModalForm = ({onSave ,modoEdicion = false , servicio = null , listServicio
     };
 
     const handleClose = () => {
+
+        setImage('')
+        setDescripcion('')
+        setHost('')
+        setIp('')
+
+        setError(null)
         setOpen(false);
     };
     const handleFile = (e) => {
+       
         setImage( e.target.files[0])
-
+        
     }
+
     const procesarDatos = (e) => {
     
         e.preventDefault()
@@ -59,7 +68,7 @@ const ModalForm = ({onSave ,modoEdicion = false , servicio = null , listServicio
             return
         }
 
-
+        // si edicion es verdadera actualiza
         if(modoEdicion){
          
             servicio.image = image
@@ -68,7 +77,7 @@ const ModalForm = ({onSave ,modoEdicion = false , servicio = null , listServicio
             servicio.ip = ip
             onSave(servicio)
         }else{
-          
+          //sino inserta
             
             onSave({
                 image: image,
