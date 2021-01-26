@@ -189,8 +189,9 @@ const ModalForm = ({onSave ,modoEdicion = false , servicio = null , listServicio
                            value={ip}
                            onChange={e => setIp(e.target.value)}
                            maskChar=" ">
-                            {() => <TextField />}
+                            {() => <TextField label="IP"/>}
                         </InputMask>
+
                     </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">

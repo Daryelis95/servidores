@@ -1,8 +1,6 @@
 import React from 'react'
 import {hot} from 'react-hot-loader';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
+import { makeStyles } from '@material-ui/core/styles';
 import TablePagination from '@material-ui/core/TablePagination';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -16,8 +14,9 @@ const ListService = () => {
 
     const [page, setPage] = React.useState(0); //pagina
     const [rowsPerPage, setRowsPerPage] = React.useState(5); //filas por paginas
-    const [servicios, setServicios] = React.useState([]); //filas por paginas
+    const [servicios, setServicios] = React.useState([]); //listado de servicios
 
+    //obtener servicios existentes
     const obtenerData = () => {
 
         axios.get(`/api/service`)
@@ -50,6 +49,9 @@ const ListService = () => {
             maxHeight: '80%',
             rounded:'rounded'
         },
+        fila:{
+            width: 50
+        },
     });
 
     const classes = useStyles();
@@ -61,6 +63,7 @@ const ListService = () => {
     //Funcion para cambiar de pagina
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
+        
     };
     //funcion para cambiar fila por paginas
     const handleChangeRowsPerPage = (event) => {
@@ -136,14 +139,14 @@ const ListService = () => {
         });
        
     }
-
+    // drad and drop
     const handleOnDragEnd = (result) => {
       
         if (!result.destination) return; //verifica si el destino existe sino sale de la funcion
         const items = servicios;
         const [reorderedItem] = items.splice(result.source.index, 1); //elemento arrastrado
         items.splice(result.destination.index, 0, reorderedItem); // Luego usamos nuestro destination.inddex
-        setServicios(items);                                         //para agregar ese elemento nuevamente a la matriz, pero en su nueva ubicación, 
+        setServicios(items);                                        //para agregar ese elemento nuevamente a la matriz, pero en su nueva ubicación, 
     }                                            //nuevamente usandosplice
     
     return (
@@ -153,6 +156,7 @@ const ListService = () => {
             <table className="table">
                 <thead className="thead-dark">
                     <tr>
+                    
                     <th scope="col">Image</th>
                     <th scope="col">Descripcion</th>
                     <th scope="col">Host</th>
@@ -172,10 +176,11 @@ const ListService = () => {
                                 <Draggable key={item.id} draggableId={item.image} index={index}>
                                 {(provided) => (
                                     <tr  ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                       
                                         <td className={classes.image }>
                                             <img className={classes.img} alt="image" src={`storage/${item.image}`}/>
                                         </td>
-                                        <td>
+                                        <td >
                                             {item.descripcion}
                                         </td>
                                         <td>
